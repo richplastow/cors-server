@@ -1,7 +1,7 @@
-initialtest-ookive
-==================
+Cors Server
+===========
 
-#### Experimenting with JSON-P and CORS as part of a persistent archived storage solution 
+#### A test CORS server, written in NodeJS, deployed to OpenShift
 
 
 
@@ -13,7 +13,7 @@ This project has a GitHub repo (which is useful for storing and sharing code), a
 repo (which contains the code which actually runs). It uses three branches: 
 
 - `gh-pages` used to display a static project page
-- `dev` contains the latest unstable releases
+- `dev` contains unstable development releases
 - `master` contains stable production releases
 
 
@@ -25,21 +25,23 @@ repo (which contains the code which actually runs). It uses three branches:
 4.  Add a field to the "scripts" section of packages.json, `"start": "supervisor index.js"`
 5.  Create an initial index.js file, just enough to establish that the host's running (see below)
 6.  Test locally, `node index.js`
-7.  Add these files to master, and push to GitHub
+7.  Add packages.json and index.js to the master branch, commit, and push to GitHub
 8.  In the [Openshift Applications tab,](https://openshift.redhat.com/app/console/applications) 
     click 'Add Application'
 9.  Choose 'Node.js 0.10'
-10. Public URL 'http://cors-<your-namespace>.rhcloud.com/'
-11. Source Code 'https://github.com/<your-username>/cors-server'
+10. Public URL `http://cors-<your-namespace>.rhcloud.com/`
+11. Source Code `https://github.com/<your-username>/cors-server`
 12. Branch/tag: 'master'
 13. Click 'Create Application'
 14. Browse to http://cors-ookive.rhcloud.com/ to test the host is running
 15. `git remote add live -f ssh://556e32685004464267000014@cors-ookive.rhcloud.com/~/git/cors.git/`
-16. `git merge live/master -s recursive -X ours`
+16. `git merge live/master -s recursive -X ours`, [see here](http://stackoverflow.com/a/12669112)
 17. Make a minor amend to index.js which will be visible when the server is updated and restarts
 18. `git push live HEAD`, which should show a couple of dozen lines about build and deployment
 19. After `remote: Deployment completed with status: success`, a browser refresh shows the update
 20. Backup to GitHub, `git push`
+
+@todo dev and gh-pages setup
 
 
 #### The initial index.js file:
