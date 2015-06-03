@@ -1,6 +1,6 @@
 {
   "name": "cors-server",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A test CORS server, written in NodeJS, deployed to OpenShift",
   "main": "index.js",
   "scripts": {

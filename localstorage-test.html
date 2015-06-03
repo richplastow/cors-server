@@ -152,9 +152,14 @@ window.addEventListener('storage', function(e) {
 });
 
 
-//// Run some checks. 
+//// Run some checks. @todo more
 if (! window.localStorage) { log('no window.localStorage available!'); }
 
+
+//// Run 'Test' if the URL hash fragment is '#test' (good for BrowserStack). 
+if ('#test' === location.hash) {
+    simulateClick( $('#test') );
+}
 
 }).call(this, document) });
 
