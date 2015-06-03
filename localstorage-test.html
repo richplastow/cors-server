@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>LocalStorage Test</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <!-- 20150603^RP -->
+  <style>
+    pre {
+        padding: .5em;
+        border: 2px solid silver;
+    }
+  </style>
+
+  <script>
+
+//// When the DOM is ready, set up and boot the LocalStorage research. 
+window.addEventListener('load', function () { (function (d) { 'use strict'; 
+
+
+//// Declare iterator and length. 
+var i, l
+
+
+//// Like jQuery, but native. 
+  , $  = d.querySelector.bind(d)
+  , $$ = d.querySelectorAll.bind(d)
+
+
+//// References to HTML elements. 
+  , $log = $('#log')
+
+
+//// Logs a message to the `<pre id="log">` element. 
+  , log = function (msg) { $log.innerHTML += msg + '\n'; }
+
+
+//// Simulates a mouse click on the given element. 
+//// http://mdn.beonex.com/en/DOM/element.dispatchEvent.html
+  , simulateClick = function ($el) {
+        var evt = document.createEvent('MouseEvents');
+        evt.initMouseEvent('click', true, true, window,
+          0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        var canceled = ! $el.dispatchEvent(evt);
+        if (canceled) {
+            // A handler called preventDefault
+        } else {
+            // None of the handlers called preventDefault
+        }
+    }
+;
+
+
+//// Attach behavior to the special 'Test' button. 
+$('#test').addEventListener('click', function () {
+    $('#log').innerHTML = '---- Test ----\n';
+    $('#log').innerHTML += '#clear...      '; simulateClick( $('#clear') );
+    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
+    log('Set key to:   "nope"') ; $('#key').value   = 'nope';
+    $('#log').innerHTML += '#getItem...    '; simulateClick( $('#getItem') );
+    log('Set key to:   "foo"')  ; $('#key').value   = 'foo';
+    log('Set value to: "bar"')  ; $('#value').value = 'bar';
+    $('#log').innerHTML += '#setItem...    '; simulateClick( $('#setItem') );
+    log('Set key to:   ""')     ; $('#key').value   = '';
+    log('Set value to: "123"')  ; $('#value').value = '123';
+    $('#log').innerHTML += '#setItem...    '; simulateClick( $('#setItem') );
+    $('#log').innerHTML += '#getItem...    '; simulateClick( $('#getItem') );
+    log('Set value to: ""')     ; $('#value').value = '';
+    $('#log').innerHTML += '#setItem...    '; simulateClick( $('#setItem') );
+    $('#log').innerHTML += '#getItem...    '; simulateClick( $('#getItem') );
+    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
+    $('#log').innerHTML += '#removeItem... '; simulateClick( $('#removeItem') );
+    $('#log').innerHTML += '#dump...       '; simulateClick( $('#dump') );
+    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
+    $('#log').innerHTML += '#clear...      '; simulateClick( $('#clear') );
+    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
+    // @todo test Storage events
+    var expected = [
+        '---- Test ----'
+      , '#clear...      Already empty'
+      , '#length...     0'
+      , 'Set key to:   "nope"'
+      , '#getItem...    null'
+      , 'Set key to:   "foo"'
+      , 'Set value to: "bar"'
+      , '#setItem...    undefined'
+      , 'Set key to:   ""'
+      , 'Set value to: "123"'
+      , '#setItem...    undefined'
+      , '#getItem...    123'
+      , 'Set value to: ""'
+      , '#setItem...    undefined'
+      , '#getItem...    '
+      , '#length...     2'
+      , '#removeItem... undefined'
+      , '#dump...       foo: bar'
+      , '#length...     1'
+      , '#clear...      undefined'
+      , '#length...     0'
+      , ''
+    ];
+    if ( $('#log').innerHTML === expected.join('\n') ) {
+        log('---- Pass ----');
+    } else {
+        log('---- Fail ----');
+    }
+
+
+});
+
+
+//// Attach behaviors to the other buttons. 
+$('#length').addEventListener('click', function () {
+    log( localStorage.length );
+});
+$('#setItem').addEventListener('click', function () {
+    log( localStorage.setItem( $('#key').value, $('#value').value ) );
+});
+$('#getItem').addEventListener('click', function () {
+    log( localStorage.getItem( $('#key').value ) );
+});
+$('#removeItem').addEventListener('click', function () {
+    log( localStorage.removeItem( $('#key').value ) );
+});
+$('#clear').addEventListener('click', function () {
+    if (localStorage.length) {
+        log( localStorage.clear() );
+    } else {
+        log('Already empty');
+    }
+});
+$('#dump').addEventListener('click', function () {
+    if (! localStorage.length) {
+        log('Empty storage');
+    } else {
+        for (var key, i=0, l=localStorage.length; i<l; i++) {
+            key = localStorage.key(i);
+            log( key + ': ' + localStorage.getItem(key) );
+        }
+    }
+});
+
+
+//// Listen for changes to the storage. 
+window.addEventListener('storage', function(e) {
+    log( "Key '" + e.key + "' of storageArea '" + e.storageArea + "'");
+    if (null === e.oldValue) {
+        log( "Was created, as '" + e.newValue + "'");
+    } else {
+        log( "Changed from '" + e.oldValue + "' to '" + e.newValue + "'");
+    }
+    log( "URL: " + e.url);
+});
+
+
+//// Run some checks. 
+if (! window.localStorage) { log('no window.localStorage available!'); }
+
+
+}).call(this, document) });
+
+  </script>
+
+</head>
+<body>
+
+<h1>LocalStorage Test</h1>
+
+<label for="key">Key</label>
+<input type="text" id="key">
+<label for="value">Value</label>
+<input type="text" id="value">
+<br>
+
+<button id="length">length</button>
+<button id="setItem">setItem()</button>
+<button id="getItem">getItem()</button>
+<button id="removeItem">removeItem()</button>
+<button id="clear">clear()</button>
+<br>
+
+<button id="dump">Dump</button>
+<button id="test">Test</button>
+
+<pre id="log">Log:
+</pre>
+
+</body>
+</html>
