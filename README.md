@@ -33,7 +33,7 @@ repo (which contains the code which actually runs). It uses three branches:
 11. Source Code `https://github.com/<your-username>/cors-server`
 12. Branch/tag: 'master'
 13. Click 'Create Application'
-14. Browse to http://cors-ookive.rhcloud.com/ to test the host is running
+14. Browse to `http://cors-<your-namespace>.rhcloud.com/` to test the host is running
 15. `git remote add live -f ssh://556e32685004464267000014@cors-ookive.rhcloud.com/~/git/cors.git/`
 16. `git merge live/master -s recursive -X ours`, [see here](http://stackoverflow.com/a/12669112)
 17. Make a minor amend to index.js which will be visible when the server is updated and restarts
@@ -41,7 +41,7 @@ repo (which contains the code which actually runs). It uses three branches:
 19. After `remote: Deployment completed with status: success`, a browser refresh shows the update
 20. Backup to GitHub, `git push`
 
-@todo dev and gh-pages setup
+@todo dev and gh-pages setup, and .gitignore
 
 
 #### The initial index.js file:
