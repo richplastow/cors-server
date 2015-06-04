@@ -61,3 +61,68 @@ http.createServer(function (req, res) {
 }).listen(port, ip);
 console.log('Server running at http://' + ip + ':' + port + '/');
 ```
+
+
+
+
+`http://` Test Results @todo more
+----------------------
+
+
+#### Pass:
+
+- iPad 3rd (6.0)
+- iPad 4S (6.0)
+- iPad AIR (8.3)
+- HTC One M8 with Android 4.4
+- Yandex 14.12 on Windows XP
+
+
+#### Limited Pass:
+
+- Nokia Lumia 930 with Windows Phone 8.1
+  - No cross-window events
+  - Triggers events in same window instead
+  - Possibly has issues sharing some data between windows..?
+
+
+#### Fail:
+
+- Samsung Galaxy S with Android 2.2
+- Motorola Droid Razr with Android 2.3
+- Internet Explorer 8 on Windows XP
+`
+
+
+
+
+`file://` Test Results @todo more
+----------------------
+
+
+#### Pass:
+
+- Opera 12.16 on Mac OS X 10.6.8
+- Safari 5.1.10 on Mac OS X 10.6.8
+- Chrome 43.0.2357.81 (64-bit) on Mac OS X 10.6.8
+
+
+#### Limited Pass:
+
+- Firefox 36.0 on Mac OS X 10.6.8
+  - No cross-window events
+
+
+#### Fail:
+
+
+
+
+
+
+
+
+
+
+
+

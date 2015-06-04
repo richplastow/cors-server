@@ -3,11 +3,45 @@
 <head>
   <title>LocalStorage Test</title>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <!-- 20150603^RP -->
   <style>
+    body {
+        font-size: 14px;
+    }
     pre {
+        width: 95%;
         padding: .5em;
-        border: 2px solid silver;
+        border: 0.1em solid silver;
+    }
+    button, input {
+        padding: .5em;
+        font-size: 1em;
+    }
+    @media (min-width: 600px) {
+        body {
+            font-size: 18px;
+        }
+    }
+    @media (min-width: 900px) {
+        body {
+            font-size: 24px;
+        }
+    }
+    @media (min-width: 1200px) {
+        body {
+            font-size: 32px;
+        }
+    }
+    @media (min-width: 1800px) {
+        body {
+            font-size: 38px;
+        }
+    }
+    @media (min-width: 2400px) {
+        body {
+            font-size: 48px;
+        }
     }
   </style>
 
@@ -17,21 +51,13 @@
 window.addEventListener('load', function () { (function (d) { 'use strict'; 
 
 
-//// Declare iterator and length. 
-var i, l
-
-
-//// Like jQuery, but native. 
-  , $  = d.querySelector.bind(d)
-  , $$ = d.querySelectorAll.bind(d)
-
-
-//// References to HTML elements. 
-  , $log = $('#log')
+//// Shortcut `getElementById()`. 
+var $ = d.getElementById.bind(d)
 
 
 //// Logs a message to the `<pre id="log">` element. 
-  , log = function (msg) { $log.innerHTML += msg + '\n'; }
+  , $log = $('log')
+  , log = function (msg, indent) { $log.innerHTML += msg + '\n' + (indent || ''); }
 
 
 //// Simulates a mouse click on the given element. 
@@ -50,58 +76,65 @@ var i, l
 ;
 
 
-//// Attach behavior to the special 'Test' button. 
-$('#test').addEventListener('click', function () {
-    $('#log').innerHTML = '---- Test ----\n';
-    $('#log').innerHTML += '#clear...      '; simulateClick( $('#clear') );
-    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
-    log('Set key to:   "nope"') ; $('#key').value   = 'nope';
-    $('#log').innerHTML += '#getItem...    '; simulateClick( $('#getItem') );
-    log('Set key to:   "foo"')  ; $('#key').value   = 'foo';
-    log('Set value to: "bar"')  ; $('#value').value = 'bar';
-    $('#log').innerHTML += '#setItem...    '; simulateClick( $('#setItem') );
-    log('Set key to:   ""')     ; $('#key').value   = '';
-    log('Set value to: "123"')  ; $('#value').value = '123';
-    $('#log').innerHTML += '#setItem...    '; simulateClick( $('#setItem') );
-    $('#log').innerHTML += '#getItem...    '; simulateClick( $('#getItem') );
-    log('Set value to: ""')     ; $('#value').value = '';
-    $('#log').innerHTML += '#setItem...    '; simulateClick( $('#setItem') );
-    $('#log').innerHTML += '#getItem...    '; simulateClick( $('#getItem') );
-    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
-    $('#log').innerHTML += '#removeItem... '; simulateClick( $('#removeItem') );
-    $('#log').innerHTML += '#dump...       '; simulateClick( $('#dump') );
-    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
-    $('#log').innerHTML += '#clear...      '; simulateClick( $('#clear') );
-    $('#log').innerHTML += '#length...     '; simulateClick( $('#length') );
+//// Attach behavior to the 'Test' button. 
+$('test').addEventListener('click', function () {
+    $log.innerHTML = '';
+    $log.innerHTML += '#clear...          '; simulateClick( $('clear') );
+    $log.innerHTML += '#length...         '; simulateClick( $('length') );
+    log('Set key to:       "nope"') ; $('key').value   = 'nope';
+    $log.innerHTML += '#getItem...        '; simulateClick( $('getItem') );
+    log('Set key to:       "foo"')  ; $('key').value   = 'foo';
+    log('Set value to:     "bar"')  ; $('value').value = 'bar';
+    $log.innerHTML += '#hasOwnProperty... '; simulateClick( $('hasOwnProperty') );
+    $log.innerHTML += '#setItem...        '; simulateClick( $('setItem') );
+    $log.innerHTML += '#hasOwnProperty... '; simulateClick( $('hasOwnProperty') );
+    log('Set key to:       ""')     ; $('key').value   = '';
+    log('Set value to:     "123"')  ; $('value').value = '123';
+    $log.innerHTML += '#setItem...        '; simulateClick( $('setItem') );
+    $log.innerHTML += '#getItem...        '; simulateClick( $('getItem') );
+    log('Set value to:     ""')     ; $('value').value = '';
+    $log.innerHTML += '#setItem...        '; simulateClick( $('setItem') );
+    $log.innerHTML += '#getItem...        '; simulateClick( $('getItem') );
+    $log.innerHTML += '#length...         '; simulateClick( $('length') );
+    $log.innerHTML += '#hasOwnProperty... '; simulateClick( $('hasOwnProperty') );
+    $log.innerHTML += '#removeItem...     '; simulateClick( $('removeItem') );
+    $log.innerHTML += '#hasOwnProperty... '; simulateClick( $('hasOwnProperty') );
+    $log.innerHTML += '#dump...           '; simulateClick( $('dump') );
+    $log.innerHTML += '#length...         '; simulateClick( $('length') );
+    $log.innerHTML += '#clear...          '; simulateClick( $('clear') );
+    $log.innerHTML += '#length...         '; simulateClick( $('length') );
     // @todo test Storage events
     var expected = [
-        '---- Test ----'
-      , '#clear...      Already empty'
-      , '#length...     0'
-      , 'Set key to:   "nope"'
-      , '#getItem...    null'
-      , 'Set key to:   "foo"'
-      , 'Set value to: "bar"'
-      , '#setItem...    undefined'
-      , 'Set key to:   ""'
-      , 'Set value to: "123"'
-      , '#setItem...    undefined'
-      , '#getItem...    123'
-      , 'Set value to: ""'
-      , '#setItem...    undefined'
-      , '#getItem...    '
-      , '#length...     2'
-      , '#removeItem... undefined'
-      , '#dump...       foo: bar'
-      , '#length...     1'
-      , '#clear...      undefined'
-      , '#length...     0'
+        '#clear...          Already empty'
+      , '#length...         0'
+      , 'Set key to:       "nope"'
+      , '#getItem...        null'
+      , 'Set key to:       "foo"'
+      , 'Set value to:     "bar"'
+      , '#hasOwnProperty... false'
+      , '#setItem...        undefined'
+      , '#hasOwnProperty... true'
+      , 'Set key to:       ""'
+      , 'Set value to:     "123"'
+      , '#setItem...        undefined'
+      , '#getItem...        123'
+      , 'Set value to:     ""'
+      , '#setItem...        undefined'
+      , '#getItem...        '
+      , '#length...         2'
+      , '#hasOwnProperty... true'
+      , '#removeItem...     undefined'
+      , '#hasOwnProperty... false'
+      , '#dump...           foo: bar'
+      , '#length...         1'
+      , '#clear...          undefined'
+      , '#length...         0'
       , ''
     ];
-    if ( $('#log').innerHTML === expected.join('\n') ) {
-        log('---- Pass ----');
+    if ( $log.innerHTML === expected.join('\n') ) {
+        $log.innerHTML = '<span style="color:#090">---- Pass ----</span>\n' + $log.innerHTML;
     } else {
-        log('---- Fail ----');
+        $log.innerHTML = '<span style="color:red">---- Fail ----</span>\n' + $log.innerHTML;
     }
 
 
@@ -109,35 +142,52 @@ $('#test').addEventListener('click', function () {
 
 
 //// Attach behaviors to the other buttons. 
-$('#length').addEventListener('click', function () {
-    log( localStorage.length );
+$('length').addEventListener('click', function () {
+    try {
+        log( localStorage.length );
+    } catch (e) { log('length() error:', '  '); log(e); }
 });
-$('#setItem').addEventListener('click', function () {
-    log( localStorage.setItem( $('#key').value, $('#value').value ) );
+$('setItem').addEventListener('click', function () {
+    try {
+        log( localStorage.setItem( $('key').value, $('value').value ) );
+    } catch (e) { log('setItem() error:', '  '); log(e); }
 });
-$('#getItem').addEventListener('click', function () {
-    log( localStorage.getItem( $('#key').value ) );
+$('getItem').addEventListener('click', function () {
+    try {
+        log( localStorage.getItem( $('key').value ) );
+    } catch (e) { log('getItem() error:', '  '); log(e); }
 });
-$('#removeItem').addEventListener('click', function () {
-    log( localStorage.removeItem( $('#key').value ) );
+$('removeItem').addEventListener('click', function () {
+    try {
+        log( localStorage.removeItem( $('key').value ) );
+    } catch (e) { log('removeItem() error:', '  '); log(e); }
 });
-$('#clear').addEventListener('click', function () {
-    if (localStorage.length) {
-        log( localStorage.clear() );
-    } else {
-        log('Already empty');
-    }
+$('hasOwnProperty').addEventListener('click', function () {
+    try {
+        log( localStorage.hasOwnProperty( $('key').value ) );
+    } catch (e) { log('hasOwnProperty() error:', '  '); log(e); }
 });
-$('#dump').addEventListener('click', function () {
-    if (! localStorage.length) {
-        log('Empty storage');
-    } else {
-        for (var key, i=0, l=localStorage.length; i<l; i++) {
-            key = localStorage.key(i);
-            log( key + ': ' + localStorage.getItem(key) );
+$('clear').addEventListener('click', function () {
+    try {
+        if (localStorage.length) {
+            log( localStorage.clear() );
+        } else {
+            log('Already empty');
         }
-    }
+    } catch (e) { log('clear() error:', '  '); log(e); }
 });
+$('dump').addEventListener('click', function () {
+    try {
+        if (! localStorage.length) {
+            log('Empty storage');
+        } else {
+            for (var key, i=0, l=localStorage.length; i<l; i++) {
+                key = localStorage.key(i);
+                log( key + ': ' + localStorage.getItem(key) );
+            }
+        }
+    } catch (e) { log('dump() error:', '  '); log(e); }
+d});
 
 
 //// Listen for changes to the storage. 
@@ -158,7 +208,7 @@ if (! window.localStorage) { log('no window.localStorage available!'); }
 
 //// Run 'Test' if the URL hash fragment is '#test' (good for BrowserStack). 
 if ('#test' === location.hash) {
-    simulateClick( $('#test') );
+    simulateClick( $('test') );
 }
 
 }).call(this, document) });
@@ -180,6 +230,7 @@ if ('#test' === location.hash) {
 <button id="setItem">setItem()</button>
 <button id="getItem">getItem()</button>
 <button id="removeItem">removeItem()</button>
+<button id="hasOwnProperty">hasOwnProperty()</button>
 <button id="clear">clear()</button>
 <br>
 

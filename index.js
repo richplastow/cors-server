@@ -1,6 +1,6 @@
 //// Get OpenShift variables, if available.
 //// See https://developers.openshift.com/en/node-js-project-structure.html
-var version = '0.0.8';
+var version = '0.0.9';
 var port    = process.env.OPENSHIFT_NODEJS_PORT || 1337;
 var ip      = process.env.OPENSHIFT_NODEJS_IP   || '127.0.0.1';
 //var env     = JSON.stringify(process.env, null, 4);
